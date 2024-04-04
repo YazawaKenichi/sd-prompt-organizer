@@ -1,3 +1,6 @@
-# sd-webui-global-prompts
+# sd-prompt-organizer
 
-A simple extension for [Stable Diffusion web UI](https://github.com/AUTOMATIC1111/stable-diffusion-webui) that adds pre- and post-fixes to the regular prompt and negative prompt fields. This way we can focus our main prompt on what matters and keep the boilerplate secret sauce ("masterpiece" "highest quality", ...) in a separate UI field.
+[sd-webui-global-prompts](https://github.com/propapanda/sd-webui-global-prompts) のフォーク
+
+通常のプロンプトに接頭辞 `Prefix` と接尾辞 `Postfix` を追加するシンプルな Stable Diffusion WebUI の拡張機能
+
