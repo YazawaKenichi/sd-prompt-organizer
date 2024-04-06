@@ -3,142 +3,120 @@ import gradio as gr
 
 from modules.processing import StableDiffusionProcessing
 
-class Classification():
-    def __init__(self, name, inf, pos, neg, en):
-        self.name = name
-        self.info = inf
-        self.positive = pos
-        self.negative = neg
-        self.enabled = en
-
-    def ui(self):
-        with gr.Blocks():
-            with gr.Accordion(self.name, open = self.enabled):
-                with gr.Row():
-                    _enabled = gr.Checkbox(True, label = "Enable", info = self.info)
-                with gr.Row():
-                    with gr.Column():
-                        _positive_enabled = gr.Checkbox(self.enabled, label = "Positive Prompt")
-                        _positive_textbox = gr.Textbox(label = "", lines = 3, value = self.positive)
-                    with gr.Column():
-                        _negative_enabled = gr.Checkbox(self.enabled, label = "Negative Prompt")
-                        _negative_textbox = gr.Textbox(label = "", lines = 3, value = self.negative)
-        return _enabled, _positive_enabled, _positive_textbox, _negative_enabled, _negative_textbox
-
-class Classifications():
-    def __init__(self):
-        self.classifications = []
-    def add(self, name, info, positive, negative, enabled):
-        cf = Classification(name, info, positive, negative, enabled)
-        self.classifications.append(cf)
-    def ui(self):
-        r = []
-        for cf in self.classifications:
+def classification(name, info, positive, negative, enabled):
+    with gr.Row():
+        with gr.Accordion(name, open = enabled):
             with gr.Row():
-                u = cf.ui()
-            r.append(u)
-        return r
+                _enabled = gr.Checkbox(True, label = "Enable", info = info)
+            with gr.Row():
+                with gr.Column():
+                    _positive_enabled = gr.Checkbox(enabled, label = "Positive Prompt")
+                    _positive_textbox = gr.Textbox(label = "", lines = 3, value = positive)
+                with gr.Column():
+                    _negative_enabled = gr.Checkbox(enabled, label = "Negative Prompt")
+                    _negative_textbox = gr.Textbox(label = "", lines = 3, value = negative)
+    return _enabled, _positive_enabled, _positive_textbox, _negative_enabled, _negative_textbox
 
 class ExtensionTemplateScript(scripts.Script):
-    def __init__(self):
-        cfs = Classifications()
-        cfs.add(
+    def title(self):
+        return "Prompt Organizer"
+    def show(self, is_img2img):
+        return scripts.AlwaysVisible
+    def categorize(self):
+        ret = []
+        ret[0] = classification(
                 name = "品質",
                 info = "",
                 positive = "masterpiece, ultra detailed, ",
                 negative = "(low quality, worst quality, lips:1.4), ",
                 enabled = True,
                 )
-        cfs.add(
+        ret[1] = classification(
                 name = "作風",
                 info = "絵の雰囲気・タッチ",
                 positive = "",
                 negative = "",
                 enabled = True,
                 )
-        cfs.add(
+        ret[2] = classification(
                 name = "主題",
                 info = "作画対象",
                 positive = "1 girl, ",
                 negative = "",
                 enabled = True,
                 )
-        cfs.add(
+        ret[3] = classification(
                 name = "顔",
                 info = "",
                 positive = "",
                 negative = "",
                 enabled = True,
                 )
-        cfs.add(
+        ret[4] = classification(
                 name = "髪",
                 info = "",
                 positive = "",
                 negative = "",
                 enabled = True,
                 )
-        cfs.add(
+        ret[5] = classification(
                 name = "表情",
                 info = "",
                 positive = "",
                 negative = "",
                 enabled = True,
                 )
-        cfs.add(
+        ret[6] = classification(
                 name = "身体",
                 info = "体格",
                 positive = "",
                 negative = "",
                 enabled = True,
                 )
-        cfs.add(
+        ret[7] = classification(
                 name = "服装",
                 info = "",
                 positive = "",
                 negative = "",
                 enabled = True,
                 )
-        cfs.add(
+        ret[8] = classification(
                 name = "装飾",
                 info = "鞄・汗",
                 positive = "",
                 negative = "",
                 enabled = True,
                 )
-        cfs.add(
+        ret[9] = classification(
                 name = "ポーズ",
                 info = "",
                 positive = "",
                 negative = "",
                 enabled = True,
                 )
-        cfs.add(
+        ret[10] = classification(
                 name = "構図",
                 info = "",
                 positive = "",
                 negative = "",
                 enabled = True,
                 )
-        cfs.add(
+        ret[11] = classification(
                 name = "背景",
                 info = "",
                 positive = "",
                 negative = "",
                 enabled = True,
                 )
-        self.classifications = cfs
+        return ret
 
-    def title(self):
-        return "Prompt Organizer"
-    def show(self, is_img2img):
-        return scripts.AlwaysVisible
     def ui(self, is_img2img):
         with gr.Accordion(self.title(), open = False):
             with gr.Tab("General"):
                 with gr.Row():
                     enabled = gr.Checkbox(False, label="Enable")
                 with gr.Row():
-                    self.classifications.ui()
+                    self.categorize()
             with gr.Tab("Example", visible = False):
                 with gr.Row():
                     enabled = gr.Checkbox(False, label="Enable")
